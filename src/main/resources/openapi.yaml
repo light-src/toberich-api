@@ -1,0 +1,466 @@
+openapi: 3.0.0
+info:
+  description: API to fetch company financial data by ticker symbol
+  title: Toberich API Server
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/v1
+paths:
+  /company/{ticker}:
+    get:
+      description: Retrieve detailed company information for the specified ticker.
+      parameters:
+      - description: "The stock ticker symbol of the company (e.g., AAPL for Apple\
+          \ Inc.)"
+        explode: false
+        in: path
+        name: ticker
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Successful response with company data
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Company with ticker not found
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Company not found
+        "401":
+          content:
+            application/json:
+              example:
+                code: 401
+                message: Unauthorized access
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized - Authentication is required
+        "403":
+          content:
+            application/json:
+              example:
+                code: 403
+                message: Access forbidden to this resource
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden - You do not have access to this resource
+      summary: Get company information
+  /company/{ticker}/incomestmt:
+    get:
+      description: Retrieve the income statement of the company for a specific ticker.
+      parameters:
+      - description: "The stock ticker symbol of the company (e.g., AAPL for Apple\
+          \ Inc.)"
+        explode: false
+        in: path
+        name: ticker
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomeStatement'
+          description: Successful response with income statement data
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Income statement not found
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Income statement not found
+        "401":
+          content:
+            application/json:
+              example:
+                code: 401
+                message: Unauthorized access
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized - Authentication is required
+        "403":
+          content:
+            application/json:
+              example:
+                code: 403
+                message: Access forbidden to this resource
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden - You do not have access to this resource
+      summary: Get income statement for the company
+  /company/{ticker}/balancesheet:
+    get:
+      description: Retrieve the balance sheet of the company for a specific ticker.
+      parameters:
+      - description: "The stock ticker symbol of the company (e.g., AAPL for Apple\
+          \ Inc.)"
+        explode: false
+        in: path
+        name: ticker
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceSheet'
+          description: Successful response with balance sheet data
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Balance sheet not found
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Balance sheet not found
+        "401":
+          content:
+            application/json:
+              example:
+                code: 401
+                message: Unauthorized access
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized - Authentication is required
+        "403":
+          content:
+            application/json:
+              example:
+                code: 403
+                message: Access forbidden to this resource
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden - You do not have access to this resource
+      summary: Get balance sheet for the company
+  /company/{ticker}/cashflow:
+    get:
+      description: Retrieve the cash flow statement of the company for a specific
+        ticker.
+      parameters:
+      - description: "The stock ticker symbol of the company (e.g., AAPL for Apple\
+          \ Inc.)"
+        explode: false
+        in: path
+        name: ticker
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashFlow'
+          description: Successful response with cash flow statement data
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Cash flow statement not found
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Cash flow statement not found
+        "401":
+          content:
+            application/json:
+              example:
+                code: 401
+                message: Unauthorized access
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Unauthorized - Authentication is required
+        "403":
+          content:
+            application/json:
+              example:
+                code: 403
+                message: Access forbidden to this resource
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Forbidden - You do not have access to this resource
+      summary: Get cash flow statement for the company
+components:
+  schemas:
+    BaseCompanyInfo:
+      properties:
+        symbol:
+          example: AAPL
+          type: string
+        cik:
+          example: "0000320193"
+          type: string
+        currency:
+          example: USD
+          type: string
+        companyName:
+          example: Apple Inc.
+          type: string
+        website:
+          example: https://www.apple.com
+          type: string
+        exchange:
+          example: NASDAQ Global Select
+          type: string
+        exchangeShortName:
+          example: NASDAQ
+          type: string
+        industry:
+          example: Consumer Electronics
+          type: string
+        country:
+          example: US
+          type: string
+      type: object
+    Company:
+      allOf:
+      - $ref: '#/components/schemas/BaseCompanyInfo'
+      - properties:
+          price:
+            example: 178.72
+            format: float
+            type: number
+          beta:
+            example: 1.286802
+            format: float
+            type: number
+          volAvg:
+            example: 58405568
+            type: integer
+          mktCap:
+            example: 2794144143933
+            type: integer
+          lastDiv:
+            example: 0.96
+            format: float
+            type: number
+          range:
+            example: 124.17-198.23
+            type: string
+          changes:
+            example: -0.13
+            format: float
+            type: number
+          ceo:
+            example: Mr. Timothy D. Cook
+            type: string
+          sector:
+            example: Technology
+            type: string
+          fullTimeEmployees:
+            example: "164000"
+            type: string
+          phone:
+            example: 408 996 1010
+            type: string
+          address:
+            example: One Apple Park Way
+            type: string
+          city:
+            example: Cupertino
+            type: string
+          state:
+            example: CA
+            type: string
+          zip:
+            example: "95014"
+            type: string
+          image:
+            example: https://financialmodelingprep.com/image-stock/AAPL.png
+            type: string
+          ipoDate:
+            example: 1980-12-12
+            type: string
+          defaultImage:
+            example: false
+            type: boolean
+          isEtf:
+            example: false
+            type: boolean
+          isActivelyTrading:
+            example: true
+            type: boolean
+          isAdr:
+            example: false
+            type: boolean
+          isFund:
+            example: false
+            type: boolean
+        type: object
+      example:
+        symbol: AAPL
+        country: US
+        cik: "0000320193"
+        mktCap: 2794144143933
+        city: Cupertino
+        companyName: Apple Inc.
+        changes: -0.13
+        range: 124.17-198.23
+        industry: Consumer Electronics
+        ceo: Mr. Timothy D. Cook
+        volAvg: 58405568
+        price: 178.72
+        isAdr: false
+        currency: USD
+        exchangeShortName: NASDAQ
+        state: CA
+        sector: Technology
+        beta: 1.286802
+        defaultImage: false
+        zip: "95014"
+        image: https://financialmodelingprep.com/image-stock/AAPL.png
+        website: https://www.apple.com
+        address: One Apple Park Way
+        lastDiv: 0.96
+        isFund: false
+        isActivelyTrading: true
+        isEtf: false
+        fullTimeEmployees: "164000"
+        phone: 408 996 1010
+        exchange: NASDAQ Global Select
+        ipoDate: 1980-12-12
+    IncomeStatement:
+      allOf:
+      - $ref: '#/components/schemas/BaseCompanyInfo'
+      - properties:
+          date:
+            example: 2022-09-24
+            type: string
+          revenue:
+            example: 394328000000
+            type: integer
+          costOfRevenue:
+            example: 223546000000
+            type: integer
+          grossProfit:
+            example: 170782000000
+            type: integer
+          operatingIncome:
+            example: 119437000000
+            type: integer
+          netIncome:
+            example: 99803000000
+            type: integer
+          eps:
+            example: 6.15
+            format: float
+            type: number
+        type: object
+      example:
+        date: 2022-09-24
+        operatingIncome: 119437000000
+        symbol: AAPL
+        country: US
+        website: https://www.apple.com
+        cik: "0000320193"
+        companyName: Apple Inc.
+        eps: 6.15
+        industry: Consumer Electronics
+        costOfRevenue: 223546000000
+        revenue: 394328000000
+        netIncome: 99803000000
+        currency: USD
+        exchange: NASDAQ Global Select
+        exchangeShortName: NASDAQ
+        grossProfit: 170782000000
+    BalanceSheet:
+      allOf:
+      - $ref: '#/components/schemas/BaseCompanyInfo'
+      - properties:
+          totalAssets:
+            example: 352755000000
+            type: integer
+          totalLiabilities:
+            example: 302083000000
+            type: integer
+          totalStockholdersEquity:
+            example: 50672000000
+            type: integer
+          cashAndCashEquivalents:
+            example: 23646000000
+            type: integer
+          shortTermInvestments:
+            example: 24658000000
+            type: integer
+        type: object
+      example:
+        symbol: AAPL
+        country: US
+        website: https://www.apple.com
+        shortTermInvestments: 24658000000
+        cik: "0000320193"
+        totalAssets: 352755000000
+        companyName: Apple Inc.
+        totalLiabilities: 302083000000
+        industry: Consumer Electronics
+        totalStockholdersEquity: 50672000000
+        currency: USD
+        exchange: NASDAQ Global Select
+        exchangeShortName: NASDAQ
+        cashAndCashEquivalents: 23646000000
+    CashFlow:
+      allOf:
+      - $ref: '#/components/schemas/BaseCompanyInfo'
+      - properties:
+          netIncome:
+            example: 99803000000
+            type: integer
+          netCashProvidedByOperatingActivities:
+            example: 122151000000
+            type: integer
+          netCashUsedForInvestingActivities:
+            example: -22354000000
+            type: integer
+          netCashUsedProvidedByFinancingActivities:
+            example: -110749000000
+            type: integer
+          cashAtEndOfPeriod:
+            example: 24977000000
+            type: integer
+        type: object
+      example:
+        symbol: AAPL
+        country: US
+        website: https://www.apple.com
+        cik: "0000320193"
+        companyName: Apple Inc.
+        industry: Consumer Electronics
+        netCashUsedProvidedByFinancingActivities: -110749000000
+        netCashProvidedByOperatingActivities: 122151000000
+        netIncome: 99803000000
+        currency: USD
+        exchange: NASDAQ Global Select
+        exchangeShortName: NASDAQ
+        cashAtEndOfPeriod: 24977000000
+        netCashUsedForInvestingActivities: -22354000000
+    ErrorResponse:
+      example:
+        code: 404
+        message: Not Found
+      properties:
+        code:
+          example: 404
+          type: integer
+        message:
+          example: Not Found
+          type: string
+      type: object
